@@ -1,8 +1,10 @@
-# db_conversor.py (versão corrigida)
+# db_conversor.py (versão final com geojsons e camadas ocultas)
 from flask import Flask, render_template_string, jsonify
-from config import engine, query_lito, query_estados
+from config import engine, query_lito, query_estados, url_database
 import geopandas as gpd
 import folium
+import json
+import os
 
 class Conversor:
     @staticmethod
@@ -51,37 +53,75 @@ class Conversor:
         uniao.loc[uniao['solo'] & uniao['estado'], 'tipo'] = 'intersecao'
 
         uniao = uniao.drop(columns=['solo', 'estado'])
-        return uniao
+        return uniao, gdf_estatigrafia, gdf_estado
 
     @staticmethod
-    def gdf_to_html(gdf, camada_nome):
-        cores = {
-            'Solo Compatível': 'red',
-            'Estado': 'blue',
-            'intersecao': 'purple'
-        }
+    def gdf_to_html(gdf_uniao, gdf_estatigrafia, gdf_estado, camada_nome="Camada Única",
+                geojson_path=None):
+        cores_tipo = {'Solo Compatível': 'red', 'Estado': 'blue', 'intersecao': 'purple'}
+        estilo_lito = {'fillColor': 'green', 'color': 'black', 'weight': 1, 'fillOpacity': 0.3}
+        estilo_estados = {'fillColor': 'orange', 'color': 'black', 'weight': 1, 'fillOpacity': 0.3}
+        estilo_geojson = {'fillColor': 'yellow', 'color': 'black', 'weight': 2, 'fillOpacity': 0.5}
 
-        def style_function(feature):
+        def style_uniao(feature):
             tipo = feature['properties'].get('tipo', 'nenhum')
-            return {
-                'fillColor': cores.get(tipo, 'gray'),
-                'color': 'black',
-                'weight': 1,
-                'fillOpacity': 0.6
-            }
+            return {'fillColor': cores_tipo.get(tipo, 'gray'), 'color': 'black', 'weight': 1, 'fillOpacity': 0.6}
 
-        # Descobrir os nomes reais das colunas litotipo1 e litotipo2 no gdf
-        colunas_litologia = [col for col in gdf.columns if col.startswith('litotipo')]
-        campos_popup = ['tipo'] + colunas_litologia
+        colunas_litologia = [col for col in gdf_uniao.columns if col.startswith('litotipo')]
+        campos_popup_uniao = ['tipo'] + colunas_litologia
+        aliases_popup_uniao = ['Tipo:'] + [f'Litotipo_{i+1}:' for i in range(len(colunas_litologia))]
+
+        campo_estado = None
+        for possivel in ['nome', 'uf', 'sigla', 'estado']:
+            if possivel in gdf_estado.columns:
+                campo_estado = possivel
+                break
+        if campo_estado is None and len(gdf_estado.columns) > 0:
+            campo_estado = gdf_estado.columns[0]
+
+
+        camadas_config = [
+            (gdf_uniao.to_json(), camada_nome, style_uniao,
+            campos_popup_uniao, aliases_popup_uniao, True),
+            (gdf_estatigrafia.to_json(), 'Litologia Original',
+            lambda x: estilo_lito, ['litotipo1', 'litotipo2'],
+            ['Litotipo 1:', 'Litotipo 2:'], False),
+            (gdf_estado.to_json(), 'Estados',
+            lambda x: estilo_estados,
+            [campo_estado] if campo_estado else [],
+            ['Estado:'] if campo_estado else [], False),
+        ]
+
+        if geojson_path is not None:
+            if isinstance(geojson_path, str):
+                geojson_path = [geojson_path]
+            for idx, path in enumerate(geojson_path):
+                if os.path.exists(path):
+                    with open(path, 'r', encoding='utf-8') as f:
+                        geojson_data = json.load(f)
+                    nome_camada = f"Minas {idx+1}" if len(geojson_path) > 1 else "Minas"
+                    camadas_config.append(
+                        (geojson_data, nome_camada,
+                         lambda x: estilo_geojson, [], [], True)
+                    )
+                else:
+                    print(f"Arquivo {path} não encontrado, pulando...")
+
         mapa = folium.Map(location=[-14.0, -55.0], zoom_start=5)
-        folium.GeoJson(
-            gdf.to_json(),
-            name=camada_nome,
-            style_function=style_function, popup=folium.GeoJsonPopup(
-            fields=campos_popup,
-            aliases=['Tipo:'] + [f'Litotipo_{i+1}:' for i in range(len(colunas_litologia))]
-        )
-        ).add_to(mapa)
+
+        for dados, nome, estilo, campos, aliases, show_inicial in camadas_config:
+            camada = folium.GeoJson(
+                dados,
+                name=nome,
+                style_function=estilo,
+                popup=folium.GeoJsonPopup(fields=campos, aliases=aliases) if campos else None
+            )
+            if not show_inicial:
+                grupo = folium.FeatureGroup(name=nome, show=False)
+                camada.add_to(grupo)
+                grupo.add_to(mapa)
+            else:
+                camada.add_to(mapa)
 
         folium.LayerControl().add_to(mapa)
         return mapa._repr_html_()
