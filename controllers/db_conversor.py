@@ -108,7 +108,8 @@ class Conversor:
                     print(f"Arquivo {path} não encontrado, pulando...")
 
         mapa = folium.Map(location=[-14.0, -55.0], zoom_start=5)
-
+        mapa.get_root().width = "100%"
+        mapa.get_root().height = "100%"
         for dados, nome, estilo, campos, aliases, show_inicial in camadas_config:
             camada = folium.GeoJson(
                 dados,
