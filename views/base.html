@@ -9,8 +9,18 @@
     />
 </head>
 <body>
+     <header>
+        <h1 class="titulo"><a href="{{url_for('index')}}">RVL - GeoLoc</a></h1>
+        <div class="options">
+            <h1><a href="{{url_for('perfil')}}">Perfil</a></h1>
+            <h1><a href="{{url_for('mapa')}}">Mapa</a></h1>
+        </div>
+    </header>
     {% block content %}
 
     {% endblock content %}
+    <footer>
+        <h5>Dados: Serviço Geológico Brasileiro, OpenStreetMap.</h5>
+    </footer>
 </body>
 </html>

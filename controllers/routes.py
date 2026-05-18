@@ -7,7 +7,11 @@ app = Flask(__name__, template_folder='views')
 def init_app(app):
     @app.route('/')
     def index():
-        return redirect(url_for('mapa'))
+        return render_template('index.html')
+    @app.route('/conta')
+    def perfil():
+        return render_template('perfil.html')
+    
 
     @app.route('/mapa')
     def mapa():

@@ -2,14 +2,8 @@
  {% extends "base.html" %}
  
     {% block content %}
- <header>
-        <h1>Visualização de Fosfato no Brasil</h1>
-    </header>
     <main>
         {{mapa_html | safe}}
     </main>
-    <footer>
-        <p>Dados: Serviço Geológico Brasileiro, OpenStreetMap.</p>
-    </footer>
     
     {% endblock content %}
