@@ -1,5 +1,5 @@
 from sqlalchemy import create_engine
-
+from flask_sqlalchemy import SQLAlchemy
 
 db_parametros = {
     "usuario" : 'postgres',
@@ -8,7 +8,9 @@ db_parametros = {
     "porta": '5432',
     "bd" : 'rvlgeoloc'
 }
+db = SQLAlchemy()
 db_url = f'postgresql://{db_parametros["usuario"]}:{db_parametros["senha"]}{db_parametros["host"]}:{db_parametros["porta"]}/{db_parametros["bd"]}'
+db_nome = {"projeto" : "rvlgeoloc", "litoestatigrafia" : "banco_lito"}
 engine = create_engine(db_url)
 query_lito = "select * from public.banco_lito where lower(litotipo2) like '%%carbonatito%%' or lower(litotipo1) like '%% piroxenito%%'"
 query_estados = "select * from public.teste where nome like '%%São Paulo%%'"

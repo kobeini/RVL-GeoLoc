@@ -6,6 +6,7 @@ import folium
 import json
 import os
 
+
 class Conversor:
     @staticmethod
     def postgis_to_gdf(query_estatigrafia=None, query_estado=None, geom_col='wkb_geometry'):
