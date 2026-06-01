@@ -1,9 +1,10 @@
 # routes.py
-from flask import Flask, render_template, redirect, url_for, request
+from flask import Flask, render_template, redirect, url_for, request, flash, session
 from config import db
 from controllers.db_conversor import Conversor
 from models.database.db_usuario import Usuario
-from werkzeug.security import generate_password_hash
+from markupsafe import Markup
+from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__, template_folder='views')
 
@@ -25,11 +26,18 @@ def init_app(app):
             nome = request.form['nome']
             email = request.form['email']
             senha = request.form['senha']
+            usuario = Usuario.query.filter_by(email=email).first()
+            if usuario:
+                msgUsuario = Markup("Usuário já cadastrado. Faça o login")
+                flash(msgUsuario, 'danger')
+                return redirect(url_for('cadastro'))
             senha_hash = generate_password_hash(senha, method='scrypt')
             novousuario = Usuario(email=email,senha=senha_hash, nome=nome, permissao=None)
             db.session.add(novousuario)
             db.session.commit()
-            return redirect(url_for('login'))
+            msgCad = Markup("Cadastro realizado com sucesso!")
+            flash(msgCad, 'sucesss')
+            return redirect(url_for('cadastro'))
         return render_template('cadastro.html', pagina = 'cadastro')
     
     
@@ -39,8 +47,19 @@ def init_app(app):
             nome = request.form['nome']
             email = request.form['email']
             senha = request.form['senha'] 
-            return redirect(url_for('cadastro'))
-        return render_template('cadastro.html', pagina = 'login')
+            
+            usuario = Usuario.query.filter_by(email=email).first()
+            if usuario:
+                if check_password_hash(usuario.senha, senha):
+                    session['usuario_id'] = usuario.id
+                    session['usuario_email'] = usuario.email
+                    msgLogin = "Login realizado"
+                    flash(msgLogin, 'sucess')
+                    redirect(url_for('index'))
+                else:
+                    msgLogin = "Login não autorizado"
+                    flash(msgLogin, 'danger')
+        return render_template('login.html', pagina = 'login')
     
     
     @app.route('/mapa')

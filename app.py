@@ -8,6 +8,7 @@ import pymysql
 
 app = Flask(__name__, template_folder='views')
 app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql://root@localhost/{db_nome['projeto']}'
+app.config['SECRET_KEY'] = '1234'
 routes.init_app(app)
 
 if __name__ == '__main__':
