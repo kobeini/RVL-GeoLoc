@@ -1,11 +1,41 @@
-{% extends "base.html" %} {% block content %}
-<div class="containerUser">
-   <img src="{{url_for('static', filename='/imgs/placeholder_user.png')}}" alt="" class="profilePicture">
-  {% for atributo in lerUsuario %}
+{% extends "base.html" %}
+{% block content %}
 
-  <h2>{{atributo.nome}}</h2>
-  <p>{{atributo.email}}</p>
 
-  {% endfor %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/perfil.css') }}">
+
+<div class="profile-page">
+  <div class="content">
+    <div class="content__cover">
+      <div class="content__avatar" style="background-image: url('{{ url_for('static', filename='imgs/placeholder_user.png') }}'); background-size: cover; background-position: center;"></div>
+      <div class="content__bull"><span></span><span></span><span></span><span></span><span></span></div>
+    </div>
+    
+    <div class="content__title">
+      <h1>{{ session['usuario_nome'] }}</h1>
+      <span>{{ session['usuario_email'] }}</span>
+    </div>
+    
+    <div class="content__options">
+      
+      <p id="link-editar">Editar Conta</p>
+      <p id="link-sair">Sair da Conta</p>
+      <p id="link-deletar" class="delete-link">Deletar Conta</p>
+    </div>
+    
+    <div class="content__spacer"></div>
+  </div>
 </div>
+
+<div class="modal-overlay" id="modal-confirmacao">
+  <div class="modal-box">
+    <p id="modal-mensagem"></p>
+    <div class="modal-buttons">
+      <button class="modal-btn btn-yes" id="btn-sim">Sim</button>
+      <button class="modal-btn btn-no" id="btn-nao">Não</button>
+    </div>
+  </div>
+</div>
+</div>
+<script src="{{ url_for('static', filename='js/modal.js') }}"></script>
 {% endblock content %}

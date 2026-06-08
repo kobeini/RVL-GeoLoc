@@ -14,7 +14,7 @@ def init_app(app):
         return render_template('index.html', pagina = 'index')
     
     
-    @app.route('/conta', methods=['GET', 'POST'])
+    @app.route('/perfil', methods=['GET', 'POST'])
     def perfil():
         lerUsuario = Usuario.query.all()
         return render_template('perfil.html', lerUsuario = lerUsuario, pagina = 'perfil')
@@ -48,10 +48,11 @@ def init_app(app):
             email = request.form['email']
             senha = request.form['senha'] 
             
-            usuario = Usuario.query.filter_by(email=email).first()
+            usuario = Usuario.query.filter_by(email=email, nome=nome).first()
             if usuario:
                 if check_password_hash(usuario.senha, senha):
                     session['usuario_id'] = usuario.id
+                    session['usuario_nome'] = usuario.nome
                     session['usuario_email'] = usuario.email
                     msgLogin = "Login realizado"
                     flash(msgLogin, 'sucess')
@@ -61,6 +62,14 @@ def init_app(app):
                     flash(msgLogin, 'danger')
         return render_template('login.html', pagina = 'login')
     
+    @app.route('/logout')
+    def logout():
+        session.clear()
+        return redirect(url_for('login'))
+    @app.route('/deletar', methods=['POST', 'GET'])
+    def deletar():
+        session.clear()
+        return redirect(url_for('login'))
     
     @app.route('/mapa')
     def mapa():

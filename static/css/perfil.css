@@ -1,6 +1,264 @@
-.containerUser{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+ 
+body {
+  background: #fff;
+  font: 0.75dvw/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  color: rgba(0,0,0,0.65);
+  letter-spacing: 0.01em;
+}
+.profile-page {
+  display: flex;
+  height: 92.5dvh;
+  width: 100dvw;
+  padding-top: 7.5dvh;
+}
+@media (max-width: 990px) {
+  .profile-page {
+    padding-top: 0;
+  }
+}
+.profile-page .content {
+  display: flex;
+  flex-direction: column;
+  justify-content:space-evenly;
+  max-width: 41.75dvw;
+  height: 50dvh;
+  width: 100%;
+  position: relative;
+  z-index: 2;
+  margin: auto;
+  padding: 3.0dvh 1.75dvw 3.5dvh;
+  background: #fff;
+  border-radius: 1.75dvw;
+  box-shadow: 0 1.5dvh 3.25dvh rgba(50,50,93,0.1), 0 0.5dvh 1.5dvh rgba(0,0,0,0.07);
+}
+@media (max-width: 990px) {
+  .profile-page .content {
+    max-width: 420px;
+    padding: 0 0 2dvh;
+    border-radius: 0;
+  }
+}
+.profile-page .content__cover {
+  position: relative;
+  
+  padding-bottom: 5dvw; 
+  margin-bottom: 3.5dvh; 
+}
+.profile-page .content__bull {
+  display: none;
+  height: 17.75dvh;
+  position: relative;
+  overflow: hidden;
+}
+@media (max-width: 990px) {
+  .profile-page .content__bull {
+    display: block;
+  }
+}
+.profile-page .content__avatar {
+  width: 10.0dvw;
+  height: 10.0dvw;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  z-index: 2;
+  transform: translate(-50%, 40%);
+  background: url("https://image.freepik.com/free-photo/friendly-brunette-looking-camera_23-2147774849.jpg") center center no-repeat;
+  background-size: cover;
+  border-radius: 50%;
+  box-shadow: 0 1.5dvh 3.25dvh rgba(50,50,93,0.15), 0 0.5dvh 1.5dvh rgba(0,0,0,0.1);
+  transition: transform 0.3s ease;
+}
+.profile-page .content__avatar:hover {
+  transform: translate(-50%, 38%) scale(1.02);
+}
+.profile-page .content__avatar::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 0.2dvw rgba(255,255,255,0.2);
+}
+@media (max-width: 990px) {
+  .profile-page .content__avatar {
+    width: 9.25dvw;
+    height: 9.25dvw;
+    border: 0.25dvw solid #fff;
+    box-shadow: none;
+  }
+}
+.profile-page .content__title {
+  margin-top: 1.5dvh;
+  padding: 0 1dvw;
+  text-align: center;
+  order: 1;
+}
+@media (max-width: 990px) {
+  .profile-page .content__title {
+    margin-top: 1dvh;
+  }
+}
+.profile-page .content__title h1 {
+  margin-bottom: 0.5dvh;
+  font-size: 2.2dvw;
+  font-weight: 700;
+  color: #1e293b;
+  line-height: 1.2;
+}
+@media (max-width: 990px) {
+  .profile-page .content__title h1 {
+    font-size: 1.6dvw;
+  }
+}
+.profile-page .content__title span {
+  font-size: 0.85dvw;
+  color: #64748b;
+  display: block;
+  margin-bottom: 1dvh;
+}
+@media (max-width: 990px) {
+  .profile-page .content__title span {
+    font-size: 0.8dvw;
+  }
+}
+.profile-page .content__options {
+  margin-top: 1.5dvh;
+  text-align: center;
+  order: 2;
+  padding: 0 1.5dvw;
+}
+@media (max-width: 990px) {
+  .profile-page .content__options {
+    margin-top: 1dvh;
+  }
+}
+.profile-page .content__options p {
+  margin-bottom: 0.75dvh;
+  font-size: 0.9dvw;
+  line-height: 1.6;
+  color: #475569;
+}
+.profile-page .content__options p:last-child {
+  margin-bottom: 0;
+}
+@media (max-width: 990px) {
+  .profile-page .content__options p {
+    font-size: 0.8dvw;
+  }
+}
+.profile-page .content__spacer {
+  flex: 1;
+  min-height: 2dvh;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.modal-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+.modal-box {
+  background: #fff;
+  padding: 2.5dvh 2.5dvw;
+  border-radius: 1.2dvw;
+  text-align: center;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 2dvh 4dvh rgba(0, 0, 0, 0.2);
+  transform: scale(0.9);
+  transition: transform 0.3s ease;
+}
+
+.modal-overlay.active .modal-box {
+  transform: scale(1);
+}
+
+.modal-box p {
+  font-size: 1.1rem;
+  color: #1e293b;
+  margin-bottom: 2dvh;
+  line-height: 1.5;
+}
+
+/* Botões */
+.modal-buttons {
+  display: flex;
+  gap: 1dvw;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.modal-btn {
+  padding: 1dvh 2dvw;
+  border: none;
+  border-radius: 0.6dvw;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+  font-weight: 600;
+  min-width: 80px;
+}
+
+.modal-btn:hover {
+  transform: translateY(-1px);
+}
+
+.modal-btn:active {
+  transform: translateY(0);
+}
+
+.btn-yes {
+  background: #ef4444;
+  color: #fff;
+}
+
+.btn-yes:hover {
+  background: #dc2626;
+}
+
+.btn-no {
+  background: #e2e8f0;
+  color: #1e293b;
+}
+
+.btn-no:hover {
+  background: #cbd5e1;
+}
+@media (max-width: 600px) {
+  .modal-box {
+    padding: 4dvh 5dvw;
+    border-radius: 4dvw;
+  }
+  .modal-btn {
+    padding: 1.2dvh 5dvw;
+    font-size: 0.9rem;
+  }
+}
+.delete-link {
+  color: #ef4444 !important;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
 }

@@ -17,7 +17,11 @@
      <header>
         <h1 class="navbar-titulo navbar-texto"><a href="{{url_for('index')}}">RVL - GeoLoc</a></h1>
         <div class="options">
-            <h1 class=" navbar-texto"><a href="{{url_for('perfil')}}">Perfil</a></h1>
+            {% if session['usuario_id'] %}
+                <h1 class="navbar-texto"><a href="{{ url_for('perfil') }}">Perfil</a></h1>
+            {% else %}
+                <h1 class="navbar-texto"><a href="{{ url_for('cadastro') }}">Entrar</a></h1>
+            {% endif %}
             <h1 class=" navbar-texto"><a href="{{url_for('mapa')}}">Mapa</a></h1>
         </div>
     </header>
