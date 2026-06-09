@@ -1,29 +1,100 @@
-{% extends "base.html" %}
-{% block content %}
-
-
-<link rel="stylesheet" href="{{ url_for('static', filename='css/perfil.css') }}">
+{% extends "base.html" %} {% block content %}
 
 <div class="profile-page">
   <div class="content">
+    <!-- ... avatar e bull ... -->
     <div class="content__cover">
-      <div class="content__avatar" style="background-image: url('{{ url_for('static', filename='imgs/placeholder_user.png') }}'); background-size: cover; background-position: center;"></div>
-      <div class="content__bull"><span></span><span></span><span></span><span></span><span></span></div>
+      <div
+        class="content__avatar"
+        style="background-image: url('{{ url_for('static', filename='imgs/placeholder_user.png') }}');"
+      ></div>
+      <div class="content__bull">
+        <span></span><span></span><span></span><span></span><span></span>
+      </div>
     </div>
-    
+
     <div class="content__title">
       <h1>{{ session['usuario_nome'] }}</h1>
       <span>{{ session['usuario_email'] }}</span>
     </div>
-    
-    <div class="content__options">
-      
-      <p id="link-editar">Editar Conta</p>
-      <p id="link-sair">Sair da Conta</p>
-      <p id="link-deletar" class="delete-link">Deletar Conta</p>
+    {% with messages = get_flashed_messages(with_categories=true) %} {% if
+    messages %}
+    <div class="flash-messages" id="flash-messages">
+      {% for category, message in messages %}
+      <div class="flash {{ category }}">{{ message }}</div>
+      {% endfor %}
     </div>
-    
+    <script>
+      setTimeout(() => {
+        const flashContainer = document.getElementById("flash-messages");
+        if (flashContainer) {
+          flashContainer.style.transition = "opacity 0.5s ease";
+          flashContainer.style.opacity = "0";
+          setTimeout(() => flashContainer.remove(), 500);
+        }
+      }, 4000);
+    </script>
+    {% endif %} {% endwith %}
+    <div class="content__options">
+      <p><a id="link-editar" style="cursor: pointer">Editar Perfil</a></p>
+      <p><a id="link-sair" style="cursor: pointer">Sair da Conta</a></p>
+      <p><a id="link-deletar" class="delete-link">Deletar Conta</a></p>
+    </div>
+
     <div class="content__spacer"></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-editar">
+  <div class="modal-box">
+    <h3>Editar Perfil</h3>
+    <form action="{{ url_for('editar') }}" method="POST" id="form-editar">
+      <input
+        type="text"
+        name="nome"
+        class="form-control"
+        value="{{ session['usuario_nome'] }}"
+        required
+      />
+      <input
+        type="email"
+        name="email"
+        class="form-control"
+        value="{{ session['usuario_email'] }}"
+        required
+      />
+      <input
+        type="password"
+        name="senha_atual"
+        class="form-control"
+        placeholder="Senha atual"
+        required
+      />
+
+      <input
+        type="password"
+        name="senha"
+        class="form-control"
+        placeholder="Nova senha (deixe em branco para manter)"
+        minlength="6"
+      />
+      <input
+        type="password"
+        name="confirmar_senha"
+        class="form-control"
+        placeholder="Confirmar nova senha"
+        minlength="6"
+      />
+      <small id="erro-senha" style="display: none"
+        >As senhas não coincidem.</small
+      >
+      <div class="modal-buttons">
+        <button type="submit" class="modal-btn btn-salvar">Salvar</button>
+        <button type="button" class="modal-btn btn-no" id="btn-cancelar-edicao">
+          Cancelar
+        </button>
+      </div>
+    </form>
   </div>
 </div>
 
@@ -36,6 +107,24 @@
     </div>
   </div>
 </div>
+
+<div class="modal-overlay" id="modal-deletar">
+  <div class="modal-box">
+    <h3>Deletar Conta</h3>
+    <p style="color:#dc2626; font-weight:600;">Esta ação é irreversível!</p>
+    <form action="/deletar" method="POST" id="form-deletar">
+      <input type="password" name="senha_atual" class="form-control" placeholder="Senha atual para confirmar" required>
+      <small id="erro-deletar" style="display:none;">A senha é obrigatória.</small>
+      <div class="modal-buttons" style="margin-top: 2dvh;">
+        <button type="submit" class="modal-btn btn-yes">Sim, deletar</button>
+        <button type="button" class="modal-btn btn-no" id="btn-cancelar-deletar">Cancelar</button>
+      </div>
+    </form>
+  </div>
 </div>
-<script src="{{ url_for('static', filename='js/modal.js') }}"></script>
+
+<script src="{{ url_for('static', filename='js/modalSair.js') }}"></script>
+<script src="{{ url_for('static', filename='js/modalDeletar.js') }}"></script>
+<script src="{{ url_for('static', filename='js/modalEditar.js') }}"></script>
+
 {% endblock content %}

@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 db_parametros = {
     "usuario" : 'postgres',
-    "senha" : 'nainha04131120',
+    "senha" : 'admin',
     "host":'localhost',
     "porta": '5432',
     "bd" : 'rvlgeoloc'

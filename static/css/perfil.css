@@ -202,7 +202,6 @@ body {
   line-height: 1.5;
 }
 
-/* Botões */
 .modal-buttons {
   display: flex;
   gap: 1dvw;
@@ -261,4 +260,180 @@ body {
   font-weight: 600;
   cursor: pointer;
   text-decoration: underline;
+}
+#modal-editar .modal-box {
+  max-width: 450px;          
+  text-align: left;
+  padding: 3dvh 2.5dvw;
+}
+
+#modal-editar h3 {
+  text-align: center;
+  font-size: 1.8dvw;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 2.5dvh;
+  line-height: 1.2;
+}
+
+#modal-editar .form-control {
+  display: block;
+  width: 100%;
+  padding: 1.2dvh 1.2dvw;
+  margin-bottom: 1.5dvh;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.6dvw;
+  font-size: 0.9dvw;
+  color: #1e293b;
+  background: #f8fafc;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+#modal-editar .form-control:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 0.2dvw rgba(59, 130, 246, 0.15);
+  background: #fff;
+}
+
+#modal-editar .form-control::placeholder {
+  color: #94a3b8;
+}
+
+#erro-senha {
+  display: block;
+  margin: -0.5dvh 0 1dvh;
+  font-size: 0.8dvw;
+  color: #ef4444;
+}
+
+#modal-editar .btn-salvar {
+  background: #3b82f6;
+  color: #fff;
+}
+
+#modal-editar .btn-salvar:hover {
+  background: #2563eb;
+}
+
+.flash-messages {
+  position: fixed;
+  top: 2dvh;
+  right: 2dvw;
+  z-index: 2000;
+  max-width: 300px;
+}
+.flash {
+  padding: 1.2dvh 1.5dvw;
+  border-radius: 0.5dvw;
+  margin-bottom: 0.5dvh;
+  font-size: 0.85dvw;
+  box-shadow: 0 0.5dvh 1dvh rgba(0,0,0,0.1);
+  backdrop-filter: blur(4px);
+}
+.flash.erro {
+  background: rgba(254, 226, 226, 0.95);
+  color: #dc2626;
+  border: 1px solid #fecaca;
+}
+.flash.sucesso {
+  background: rgba(220, 252, 231, 0.95);
+  color: #16a34a;
+  border: 1px solid #bbf7d0;
+}
+
+#modal-deletar .modal-box {
+  max-width: 450px;
+  text-align: left;
+  padding: 3dvh 2.5dvw;
+}
+
+#modal-deletar h3 {
+  text-align: center;
+  font-size: 1.8dvw;
+  font-weight: 700;
+  color: #dc2626;        
+  margin-bottom: 1.5dvh;
+  line-height: 1.2;
+}
+
+#modal-deletar p {
+  text-align: center;
+  font-size: 0.95dvw;
+  color: #ef4444;
+  font-weight: 600;
+  margin-bottom: 2dvh;
+}
+
+#modal-deletar .form-control {
+  display: block;
+  width: 100%;
+  padding: 1.2dvh 1.2dvw;
+  margin-bottom: 1.5dvh;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.6dvw;
+  font-size: 0.9dvw;
+  color: #1e293b;
+  background: #f8fafc;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+#modal-deletar .form-control:focus {
+  outline: none;
+  border-color: #ef4444;
+  box-shadow: 0 0 0 0.2dvw rgba(239, 68, 68, 0.15);
+  background: #fff;
+}
+
+#modal-deletar .form-control::placeholder {
+  color: #94a3b8;
+}
+
+#erro-deletar {
+  display: block;
+  margin: -0.5dvh 0 1dvh;
+  font-size: 0.8dvw;
+  color: #ef4444;
+}
+
+#modal-deletar .modal-buttons {
+  margin-top: 2dvh;
+}
+
+@media (max-width: 600px) {
+  #modal-deletar .modal-box {
+    padding: 4dvh 5dvw;
+    border-radius: 4dvw;
+    max-width: 90%;
+  }
+  #modal-deletar h3 {
+    font-size: 1.4rem;
+  }
+  #modal-deletar .form-control {
+    padding: 2dvh 3dvw;
+    font-size: 0.9rem;
+  }
+  #modal-deletar .modal-btn {
+    padding: 1.5dvh 6dvw;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 600px) {
+  #modal-editar .modal-box {
+    padding: 4dvh 5dvw;
+    border-radius: 4dvw;
+    max-width: 90%;
+  }
+  #modal-editar h3 {
+    font-size: 1.4rem;
+  }
+  #modal-editar .form-control {
+    padding: 2dvh 3dvw;
+    font-size: 0.9rem;
+  }
+  #modal-editar .modal-btn {
+    padding: 1.5dvh 6dvw;
+    font-size: 1rem;
+  }
 }
