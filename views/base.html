@@ -1,35 +1,31 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GeoLoc</title>    
-    <link
-      rel="stylesheet"
-      href="{{url_for('static', filename='/css/style.css')}}"
-    />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='/css/' + pagina + '.css') }}"
-    />
-</head>
-<body>
-     <header>
-        <h1 class="navbar-titulo navbar-texto"><a href="{{url_for('index')}}">RVL - GeoLoc</a></h1>
-        <div class="options">
-            {% if session['usuario_id'] %}
-                <h1 class="navbar-texto"><a href="{{ url_for('perfil') }}">Perfil</a></h1>
-            {% else %}
-                <h1 class="navbar-texto"><a href="{{ url_for('cadastro') }}">Entrar</a></h1>
-            {% endif %}
-            <h1 class=" navbar-texto"><a href="{{url_for('mapa')}}">Mapa</a></h1>
-        </div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RVL - GeoLoc</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/' + pagina + '.css') }}" />
+  </head>
+  <body>
+    <header>
+      <h1 class="navbar-titulo navbar-texto">
+        <a href="{{ url_for('main.index') }}">RVL - GeoLoc</a>
+      </h1>
+      <div class="options">
+        {% if current_user.is_authenticated %}
+        <h1 class="navbar-texto"><a href="{{ url_for('main.perfil') }}">Perfil</a></h1>
+        {% else %}
+        <h1 class="navbar-texto"><a href="{{ url_for('main.cadastro') }}">Entrar</a></h1>
+        {% endif %}
+        <h1 class="navbar-texto"><a href="{{ url_for('main.mapa') }}">Mapa</a></h1>
+      </div>
     </header>
-    {% block content %}
 
-    {% endblock content %}
+    {% block content %}{% endblock content %}
+
     <footer>
-        <h5>Dados: Serviço Geológico Brasileiro, OpenStreetMap.</h5>
+      <h5>Dados: Serviço Geológico Brasileiro, OpenStreetMap.</h5>
     </footer>
-</body>
+  </body>
 </html>

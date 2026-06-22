@@ -1,126 +1,129 @@
-# routes.py
-from flask import Flask, render_template, redirect, url_for, request, flash, session, abort
-from config import db
-from controllers.db_conversor import Conversor
-from models.database.db_usuario import Usuario
-from markupsafe import Markup
-from werkzeug.security import generate_password_hash, check_password_hash
 
-app = Flask(__name__, template_folder='views')
+from functools import lru_cache
+
+from flask import Blueprint, flash, redirect, render_template, request, url_for
+from flask_login import current_user, login_required, login_user, logout_user
+from markupsafe import Markup
+
+from controllers.map_builder import MapBuilder
+from extensions import db
+from models.user import User
+
+bp = Blueprint("main", __name__)
+
+MINE_GEOJSON_PATH = "static/database/minas.geojson"
 
 
 def init_app(app):
-    @app.route('/')
-    def index():
-        return render_template('index.html', pagina='index')
+    app.register_blueprint(bp)
 
-    @app.route('/perfil', methods=['GET', 'POST'])
-    def perfil():
-        lerUsuario = Usuario.query.all()
-        return render_template('perfil.html', lerUsuario=lerUsuario, pagina='perfil')
 
-    @app.route('/cadastro', methods=['GET', 'POST'])
-    def cadastro():
-        if request.method == "POST":
-            nome = request.form['nome']
-            email = request.form['email']
-            senha = request.form['senha']
-            usuario = Usuario.query.filter_by(email=email).first()
-            if usuario:
-                msgUsuario = Markup("Usuário já cadastrado. Faça o login")
-                flash(msgUsuario, 'danger')
-                return redirect(url_for('cadastro'))
-            senha_hash = generate_password_hash(senha, method='scrypt')
-            novousuario = Usuario(
-                email=email, senha=senha_hash, nome=nome, permissao=None)
-            db.session.add(novousuario)
-            db.session.commit()
-            msgCad = Markup("Cadastro realizado com sucesso!")
-            flash(msgCad, 'sucesss')
-            return redirect(url_for('cadastro'))
-        return render_template('cadastro.html', pagina='cadastro')
+@bp.route("/")
+def index():
+    return render_template("index.html", pagina="index")
 
-    @app.route('/login', methods=['GET', 'POST'])
-    def login():
-        if request.method == "POST":
-            nome = request.form['nome']
-            email = request.form['email']
-            senha = request.form['senha']
 
-            usuario = Usuario.query.filter_by(email=email, nome=nome).first()
-            if usuario:
-                if check_password_hash(usuario.senha, senha):
-                    session['usuario_id'] = usuario.id
-                    session['usuario_nome'] = usuario.nome
-                    session['usuario_email'] = usuario.email
-                    msgLogin = "Login realizado"
-                    flash(msgLogin, 'sucess')
-                    redirect(url_for('index'))
-                else:
-                    msgLogin = "Login não autorizado"
-                    flash(msgLogin, 'danger')
-        return render_template('login.html', pagina='login')
-    @app.route('/editar', methods=['GET','POST'])
-    def editar():
-        if 'usuario_id' not in session:
-            return redirect(url_for('login'))
+@bp.route("/perfil", methods=["GET"])
+@login_required
+def perfil():
+    return render_template("perfil.html", pagina="profile")
 
-        usuario = Usuario.query.get(session['usuario_id'])
-        if not usuario:
-            session.clear()
-            return redirect(url_for('login'))
 
-        dados = request.form.to_dict()
+@bp.route("/cadastro", methods=["GET", "POST"])
+def cadastro():
+    if request.method == "POST":
+        nome = request.form["nome"]
+        email = request.form["email"]
+        senha = request.form["senha"]
 
-        if not check_password_hash(usuario.senha, dados.get('senha_atual', '')):
-            flash('Senha atual incorreta.', 'erro')
-            return redirect(url_for('perfil'))
+        if User.query.filter_by(email=email).first():
+            flash(Markup("Usuário já cadastrado. Faça o login"), "danger")
+            return redirect(url_for("main.cadastro"))
 
-        usuario.nome = dados['nome']
-        usuario.email = dados['email']
-        if dados.get('senha', '').strip():
-            usuario.senha = generate_password_hash(dados['senha'])
-
+        novo_usuario = User(name=nome, email=email)
+        novo_usuario.set_password(senha)
+        db.session.add(novo_usuario)
         db.session.commit()
-        
-        session['usuario_nome'] = usuario.nome
-        session['usuario_email'] = usuario.email
 
-        flash('Perfil atualizado com sucesso!', 'sucesso')
-        return redirect(url_for('perfil'))
+        flash(Markup("Cadastro realizado com sucesso!"), "success")
+        return redirect(url_for("main.cadastro"))
 
-    @app.route('/logout')
-    def logout():
-        session.clear()
-        return redirect(url_for('login'))
+    return render_template("cadastro.html", pagina="auth")
 
-    @app.route('/deletar', methods=['GET', 'POST'])
-    def deletar():
-        if 'usuario_id' not in session:
-            return redirect(url_for('login'))
-        usuario = Usuario.query.get(session['usuario_id'])
-        if not usuario:
-            session.clear()
-            return redirect(url_for('login'))
 
-        senha_atual = request.form.get('senha_atual', '')
-        if not check_password_hash(usuario.senha, senha_atual):
-            flash('Senha atual incorreta. Conta não foi deletada.', 'erro')
-            return redirect(url_for('perfil'))
+@bp.route("/login", methods=["GET", "POST"])
+def login():
+    if request.method == "POST":
+        nome = request.form["nome"]
+        email = request.form["email"]
+        senha = request.form["senha"]
 
-        db.session.delete(usuario)
-        db.session.commit()
-        session.clear()
+        usuario = User.query.filter_by(email=email, name=nome).first()
+        if usuario and usuario.check_password(senha):
+            login_user(usuario)
+            flash("Login realizado", "success")
+            return redirect(url_for("main.index"))
 
-        flash('Conta deletada com sucesso.', 'sucesso')
-        return redirect(url_for('cadastro'))
+        flash("Login não autorizado", "danger")
 
-    @app.route('/mapa')
-    def mapa():
-        gdf_uniao, gdf_lito, gdf_estados = Conversor.postgis_to_gdf()
-        map_html = Conversor.gdf_to_html(
-            gdf_uniao, gdf_lito, gdf_estados,
-            camada_nome="Áreas Classificadas",
-            geojson_path="static/database/minas.geojson"
-        )
-        return render_template('mapa.html', mapa_html=map_html, pagina='mapa')
+    return render_template("login.html", pagina="auth")
+
+
+@bp.route("/editar", methods=["POST"])
+@login_required
+def editar():
+    dados = request.form.to_dict()
+
+    if not current_user.check_password(dados.get("senha_atual", "")):
+        flash("Senha atual incorreta.", "danger")
+        return redirect(url_for("main.perfil"))
+
+    current_user.name = dados["nome"]
+    current_user.email = dados["email"]
+    nova_senha = dados.get("senha", "").strip()
+    if nova_senha:
+        current_user.set_password(nova_senha)
+
+    db.session.commit()
+    flash("Perfil atualizado com sucesso!", "success")
+    return redirect(url_for("main.perfil"))
+
+
+@bp.route("/deletar", methods=["POST"])
+@login_required
+def deletar():
+    senha_atual = request.form.get("senha_atual", "")
+    if not current_user.check_password(senha_atual):
+        flash("Senha atual incorreta. Conta não foi deletada.", "danger")
+        return redirect(url_for("main.perfil"))
+
+    db.session.delete(current_user)
+    db.session.commit()
+    logout_user()
+
+    flash("Conta deletada com sucesso.", "success")
+    return redirect(url_for("main.cadastro"))
+
+
+@bp.route("/logout")
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for("main.login"))
+
+
+@lru_cache(maxsize=1)
+def construtor_mapa_html() -> str:
+    merged_gdf, lithology_gdf, states_gdf = MapBuilder.load_layers()
+    return MapBuilder.build_map_html(
+        merged_gdf,
+        lithology_gdf,
+        states_gdf,
+        layer_name="Áreas Classificadas",
+        mine_geojson_paths=MINE_GEOJSON_PATH,
+    )
+
+
+@bp.route("/mapa")
+def mapa():
+    return render_template("mapa.html", mapa_html=construtor_mapa_html(), pagina="map")

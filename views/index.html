@@ -1,4 +1,24 @@
-{% extends "base.html" %} {% block content %}
+{% extends "base.html" %}
+{% block content %}
+
+{% set faq_items = [
+  {
+    'question': 'O que é o RVL-GeoLoc?',
+    'summary': 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci itaque qui deserunt nam officiis necessitatibus aspernatur fuga possimus voluptatem incidunt deleniti totam, fugit voluptas magnam, accusamus cum, sed ducimus porro!',
+    'points': ['Lorem ipsum dolor sit, amet consectetur adipisicing elit.', 'Adipisci, eos consequuntur', 'laboriosam hic quod ut. Dolorem eius minus ea', 'last pointer'],
+  },
+  {
+    'question': 'Como o projeto foi construído?',
+    'summary': 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci itaque qui deserunt nam officiis necessitatibus aspernatur fuga possimus voluptatem incidunt deleniti totam, fugit voluptas magnam, accusamus cum, sed ducimus porro!',
+    'points': ['Lorem ipsum dolor sit, amet consectetur adipisicing elit.', 'Adipisci, eos consequuntur', 'laboriosam hic quod ut. Dolorem eius minus ea', 'last pointer'],
+  },
+  {
+    'question': 'Para que serve?',
+    'summary': 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci itaque qui deserunt nam officiis necessitatibus aspernatur fuga possimus voluptatem incidunt deleniti totam, fugit voluptas magnam, accusamus cum, sed ducimus porro!',
+    'points': ['Lorem ipsum dolor sit, amet consectetur adipisicing elit.', 'Adipisci, eos consequuntur', 'laboriosam hic quod ut. Dolorem eius minus ea', 'last pointer'],
+  },
+] %}
+
 <div class="mascara">
   <div class="imagem-fundo">
     <div class="texto">
@@ -7,125 +27,53 @@
       </div>
       <div class="subtitulo">
         <h3>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Blanditiis ab
-          alias, quia autem repellat consequuntur sapiente impedit distinctio ex
-          doloremque nostrum modi omnis fugit quisquam molestias quibusdam
-          porro. Fugit, provident.
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Blanditiis
+          ab alias, quia autem repellat consequuntur sapiente impedit
+          distinctio ex doloremque nostrum modi omnis fugit quisquam
+          molestias quibusdam porro. Fugit, provident.
         </h3>
       </div>
     </div>
   </div>
 </div>
-<div class="parte-1">
 
-    <div class="caixa">
-      <div class="items">
-        <p class="indice">01</p>
-        <p class="texto-perguntas">O que é o RVL-GeoLoc?</p>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke-width="1.5"
-          stroke="currentColor"
-          class="icone"
-          >
-          <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          d="M19.5 13.5L12 21m0 0l-7.5-7.5M12 21V3"
-          />
-        </svg>
-      </div>
-    <div class="caixa-interna">
-      <div class="interno">
-        <p>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci
-        itaque qui deserunt nam officiis necessitatibus aspernatur fuga
-        possimus voluptatem incidunt deleniti totam, fugit voluptas magnam,
-        accusamus cum, sed ducimus porro!
-        </p>
-        <ul>
-        <li>Lorem ipsum dolor sit, amet consectetur adipisicing elit.</li>
-        <li>Adipisci, eos consequuntur</li>
-        <li>laboriosam hic quod ut. Dolorem eius minus ea</li>
-        <li>last pointer</li>
-        </ul>
-      </div>
-    </div>
-      <div class="items">
-        <p class="indice">02</p>
-        <p class="texto-perguntas">Como o projeto foi construído?</p>
-        <svg
+<div class="parte-1">
+  <div class="caixa">
+    {% for item in faq_items %}
+    <div class="items">
+      <p class="indice">{{ "%02d"|format(loop.index) }}</p>
+      <p class="texto-perguntas">{{ item.question }}</p>
+      <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
         viewBox="0 0 24 24"
         stroke-width="1.5"
         stroke="currentColor"
         class="icone"
-        >
-        <path
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        d="M19.5 13.5L12 21m0 0l-7.5-7.5M12 21V3"
-        />
-        </svg>
-      </div>
-      <div class="caixa-interna">
-        <div class="interno">
-          <p>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci
-        itaque qui deserunt nam officiis necessitatibus aspernatur fuga
-        possimus voluptatem incidunt deleniti totam, fugit voluptas magnam,
-        accusamus cum, sed ducimus porro!
-        </p>
-        <ul>
-        <li>Lorem ipsum dolor sit, amet consectetur adipisicing elit.</li>
-        <li>Adipisci, eos consequuntur</li>
-        <li>laboriosam hic quod ut. Dolorem eius minus ea</li>
-        <li>last pointer</li>
-        </ul>
-      </div>
-    </div>
-    <div class="items">
-      <p class="indice">03</p>
-      <p class="texto-perguntas">Para que serve?</p>
-      <svg
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke-width="1.5"
-      stroke="currentColor"
-      class="icone"
       >
-      <path
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      d="M19.5 13.5L12 21m0 0l-7.5-7.5M12 21V3"
-      />
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M19.5 13.5L12 21m0 0l-7.5-7.5M12 21V3"
+        />
       </svg>
     </div>
     <div class="caixa-interna">
       <div class="interno">
-    <p>
-    Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci
-    itaque qui deserunt nam officiis necessitatibus aspernatur fuga
-    possimus voluptatem incidunt deleniti totam, fugit voluptas magnam,
-    accusamus cum, sed ducimus porro!
-    </p>
-    <ul>
-    <li>Lorem ipsum dolor sit, amet consectetur adipisicing elit.</li>
-    <li>Adipisci, eos consequuntur</li>
-    <li>laboriosam hic quod ut. Dolorem eius minus ea</li>
-    <li>last pointer</li>
-    </ul>
+        <p>{{ item.summary }}</p>
+        <ul>
+          {% for point in item.points %}
+          <li>{{ point }}</li>
+          {% endfor %}
+        </ul>
       </div>
     </div>
-    </div>
-      <script src="{{ url_for('static', filename='js/caixaPergunta.js') }}">
-
-    </script>
+    {% endfor %}
+  </div>
 </div>
+
 <hr />
 <div class="parte-2"></div>
+
+<script src="{{ url_for('static', filename='js/faq-accordion.js') }}"></script>
 {% endblock content %}

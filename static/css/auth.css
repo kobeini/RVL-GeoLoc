@@ -1,0 +1,327 @@
+@import url("variables.css");
+@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css");
+
+.screen,
+.screen *,
+.container,
+.container * {
+  box-sizing: border-box;
+}
+
+.screen {
+  width: 100dvw;
+  height: 92.5dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-bg);
+  overflow-x: hidden;
+}
+
+.container {
+  display: flex;
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+  max-width: 52dvw;
+  width: 90%;
+  min-height: 55.5dvh;
+  position: relative;
+  font-family: var(--font-base);
+  color: var(--color-text);
+}
+
+.form-section {
+  flex: 1;
+  padding: 5.5dvh 2.5dvw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  transition: all var(--transition-base);
+  position: relative;
+  z-index: 2;
+  overflow: hidden;
+  animation: slideInLeft 0.8s ease;
+  min-width: 0;
+}
+
+.image-section {
+  flex: 1;
+  background: var(--color-brand-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-white);
+  text-align: center;
+  transition: all var(--transition-base);
+  position: relative;
+  overflow: hidden;
+  animation: slideInRight 0.8s ease;
+}
+
+.image-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: var(--color-brand);
+}
+
+.image-content {
+  z-index: 1;
+  padding: 3.75dvh;
+  position: relative;
+}
+
+.image-content h2 {
+  font-size: 2dvw;
+  margin-bottom: 1.75dvh;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.image-content p {
+  font-size: 1dvw;
+  line-height: 1.6;
+  opacity: 0.8;
+  color: var(--color-border-subtle);
+}
+
+.form-title {
+  font-size: 2dvw;
+  font-weight: 700;
+  margin-bottom: 1dvh;
+  color: var(--color-brand-dark);
+  text-align: center;
+  letter-spacing: -0.02em;
+}
+
+.form-subtitle {
+  color: var(--color-text-muted);
+  text-align: center;
+  margin-bottom: 3.75dvh;
+  font-size: 0.75dvw;
+  line-height: 1.5;
+}
+
+.form-group {
+  position: relative;
+  margin-bottom: 2.25dvh;
+}
+
+.form-group i {
+  position: absolute;
+  left: 0.75dvw;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-text-subtle);
+  transition: color var(--transition-base);
+  z-index: 1;
+}
+
+.form-control {
+  width: 100%;
+  padding: 1.5dvh 1dvw 1.5dvh 2.5dvw;
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-size: 0.75dvw;
+  transition: all var(--transition-base);
+  background: var(--color-bg-input);
+  outline: none;
+  font-weight: 500;
+}
+
+.form-control:focus {
+  border-color: var(--color-info);
+  background: var(--color-white);
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+  transform: translateY(-1px);
+}
+
+.form-control:focus + i {
+  color: var(--color-info);
+}
+
+.btn-primary,
+.botaoCadastro,
+.botaoLimpar {
+  width: 100%;
+  background: var(--color-brand);
+  color: var(--color-white);
+  padding: 1.5dvh 0.75dvw;
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: 0.75dvw;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-base);
+  margin-top: 1dvh;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5dvw;
+}
+
+.btn-primary:hover,
+.botaoCadastro:hover,
+.botaoLimpar:hover {
+  background: var(--color-brand-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
+}
+
+.btn-primary:active,
+.botaoCadastro:active,
+.botaoLimpar:active {
+  transform: translateY(0);
+}
+
+.btn-primary:disabled,
+.botaoCadastro:disabled,
+.botaoLimpar:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.botaoLimpar {
+  background: var(--color-text-subtle);
+  margin-top: 0.75dvh;
+}
+
+.botaoLimpar:hover {
+  background: var(--color-text-muted);
+  box-shadow: 0 10px 25px rgba(100, 116, 139, 0.3);
+}
+
+.form-switch {
+  text-align: center;
+  margin-top: 3dvh;
+  color: var(--color-text-muted);
+  font-weight: 500;
+  font-size: 0.75dvw;
+}
+
+.form-switch a {
+  color: var(--color-info);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color var(--transition-base);
+}
+
+.form-switch a:hover {
+  color: var(--color-info-dark);
+}
+
+.alert {
+  padding: 1.5dvh 1dvw;
+  border-radius: var(--radius-md);
+  margin-bottom: 2.25dvh;
+  font-weight: 500;
+  font-size: 0.75dvw;
+  border-left: 0.25dvw solid;
+}
+
+.alert-success {
+  background: var(--color-success-bg);
+  color: var(--color-success-text);
+  border-left-color: var(--color-success-border);
+}
+
+.alert-danger {
+  background: var(--color-danger-bg);
+  color: var(--color-danger-text);
+  border-left-color: var(--color-danger-border);
+}
+
+.alert-warning {
+  background: var(--color-warning-bg);
+  color: var(--color-warning-text);
+  border-left-color: var(--color-warning-border);
+}
+
+.alert-info {
+  background: var(--color-info-bg);
+  color: var(--color-info-text);
+  border-left-color: var(--color-info-border);
+}
+
+.loading {
+  display: none;
+}
+
+.loading.show {
+  display: inline-block;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-1.5dvw);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(1.5dvw);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+    max-width: 400px;
+    margin: 20px;
+    border-radius: 20px;
+  }
+
+  .image-section {
+    min-height: 200px;
+    order: -1;
+  }
+
+  .form-section {
+    padding: 40px 30px;
+  }
+
+  .form-title,
+  .image-content h2 {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    margin: 10px;
+    width: 95%;
+  }
+
+  .form-section {
+    padding: 30px 20px;
+  }
+
+  .form-title {
+    font-size: 1.8rem;
+  }
+}

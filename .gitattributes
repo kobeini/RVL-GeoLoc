@@ -1,2 +1,0 @@
-banco_lito.sql filter=lfs diff=lfs merge=lfs -text
-/static/database/banco_lito.sql filter=lfs diff=lfs merge=lfs -text

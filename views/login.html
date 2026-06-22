@@ -1,61 +1,15 @@
 {% extends "base.html" %}
+{% from "componentes/form_autenticador.html" import form_autenticador %}
 {% block content %}
-
-<style>
-
-</style>
-
-<div class="screen">
-    <div class="container">
-        <div class="form-section">
-            {% with messages = get_flashed_messages(with_categories = true) %}
-                {% for category, message in messages %}
-                    <div class="alert alert-{{ category }}">
-                        {{ message }}
-                    </div>
-                {% endfor %}
-            {% endwith %}
-
-            <h1 class="form-title">Entrar</h1>
-            <p class="form-subtitle">Faça login para utilizar o RVL - GeoLoc</p>
-
-            <form id="loginForm" action="{{ url_for('login') }}" method="post">
-                <div class="form-group">
-                    <input type="text" name="nome" placeholder="Nome completo" required class="form-control">
-                    <i class="fas fa-user"></i>
-                </div>
-
-                <div class="form-group">
-                    <input type="email" name="email" placeholder="Endereço de e-mail" required class="form-control">
-                    <i class="fas fa-envelope"></i>
-                </div>
-
-                <div class="form-group">
-                    <input type="password" name="senha" placeholder="Senha" required class="form-control">
-                    <i class="fas fa-lock"></i>
-                </div>
-
-                <button type="submit" class="botaoCadastro" id="submitBtn">
-                    <i class="fas fa-spinner loading" id="loadingSpinner"></i>
-                    <span class="btn-text">Entrar</span>
-                </button>
-                <button type="reset" class="botaoLimpar">Limpar</button>
-            </form>
-
-            <div class="form-switch">
-                Não possui conta? <a href="{{ url_for('cadastro') }}">Cadastre-se</a>
-            </div>
-        </div>
-
-        <div class="image-section">
-            <div class="floating-shapes"></div>
-            <div class="image-content">
-                <h2>RVL - GeoLoc</h2>
-                <p>Preencha seus dados e acesse sua conta</p>
-            </div>
-        </div>
-    </div>
-</div>
-</script>
-
+{{ form_autenticador(
+  form_id="loginForm",
+  action_endpoint="main.login",
+  title="Entrar",
+  subtitle="Faça login para utilizar o RVL - GeoLoc",
+  submit_label="Entrar",
+  switch_text="Não possui conta?",
+  switch_link_endpoint="main.cadastro",
+  switch_link_label="Cadastre-se",
+  image_title="Preencha seus dados e acesse sua conta"
+) }}
 {% endblock content %}

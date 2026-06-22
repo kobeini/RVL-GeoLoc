@@ -1,0 +1,53 @@
+:root {
+  /* Brand */
+  --color-brand: #4a6b44;
+  --color-brand-hover: #5cb84b;
+  --color-brand-dark: #0f172a;
+
+  /* Neutrals */
+  --color-text: #1e293b;
+  --color-text-muted: #64748b;
+  --color-text-subtle: #94a3b8;
+  --color-border: #e2e8f0;
+  --color-border-subtle: #cbd5e1;
+  --color-bg: #f8fafc;
+  --color-bg-input: #fefefe;
+  --color-white: #fff;
+
+  /* Feedback */
+  --color-danger: #ef4444;
+  --color-danger-dark: #dc2626;
+  --color-info: #3b82f6;
+  --color-info-dark: #2563eb;
+  --color-muted-dark: #475569;
+
+  /* Feedback backgrounds (flash messages / alerts) */
+  --color-success-bg: #d1fae5;
+  --color-success-text: #065f46;
+  --color-success-border: #10b981;
+  --color-danger-bg: #fee2e2;
+  --color-danger-text: #991b1b;
+  --color-danger-border: #ef4444;
+  --color-warning-bg: #fef3c7;
+  --color-warning-text: #92400e;
+  --color-warning-border: #f59e0b;
+  --color-info-bg: #dbeafe;
+  --color-info-text: #1e40af;
+  --color-info-border: #3b82f6;
+
+  /* Typography */
+  --font-base: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, "Helvetica Neue", Arial, sans-serif;
+
+  /* Radii */
+  --radius-sm: 0.6dvw;
+  --radius-md: 0.75dvw;
+  --radius-lg: 1.25dvw;
+
+  /* Shadows */
+  --shadow-card: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+
+  /* Transitions */
+  --transition-fast: 0.2s ease;
+  --transition-base: 0.3s ease;
+}
