@@ -203,9 +203,6 @@ class MapBuilder:
         layer_name: str = "Áreas Classificadas",
         mine_geojson_paths=None,
     ) -> str:
-        """Render the classified overlay plus reference layers as a
-        self-contained HTML fragment, ready to be embedded in a template.
-        """
         layers = cls._build_layers(merged_gdf, lithology_gdf, states_gdf, layer_name, mine_geojson_paths)
 
         leaflet_map = leafmap.Map(center=BRAZIL_MAP_CENTER, zoom=BRAZIL_MAP_ZOOM)
